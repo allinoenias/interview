@@ -1,0 +1,112 @@
+{
+  "entities": {
+    "interviewer": {
+      "title": "Interviewer",
+      "description": "Authorized interviewer profile",
+      "type": "object",
+      "properties": {
+        "interviewerId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["interviewerId", "name", "email"]
+    },
+    "candidate": {
+      "title": "Candidate",
+      "description": "Candidate personal and employment details",
+      "type": "object",
+      "properties": {
+        "candidateId": { "type": "string", "maxLength": 128 },
+        "fullName": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "email": { "type": "string", "maxLength": 100 },
+        "position": { "type": "string", "maxLength": 100 },
+        "interviewDate": { "type": "string", "maxLength": 50 },
+        "interviewerId": { "type": "string", "maxLength": 128 },
+        "interviewerName": { "type": "string", "maxLength": 100 },
+        "experience": { "type": "string", "maxLength": 50 },
+        "previousCompany": { "type": "string", "maxLength": 100 },
+        "expectedSalary": { "type": "string", "maxLength": 50 },
+        "noticePeriod": { "type": "string", "maxLength": 50 },
+        "resumeUrl": { "type": "string", "maxLength": 500 },
+        "photoUrl": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed"] },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["candidateId", "fullName", "phone", "email", "position", "interviewDate", "interviewerId"]
+    },
+    "interview": {
+      "title": "Interview",
+      "description": "Evaluation session and overall scores",
+      "type": "object",
+      "properties": {
+        "interviewId": { "type": "string", "maxLength": 128 },
+        "candidateId": { "type": "string", "maxLength": 128 },
+        "interviewerId": { "type": "string", "maxLength": 128 },
+        "interviewerName": { "type": "string", "maxLength": 100 },
+        "candidateName": { "type": "string", "maxLength": 100 },
+        "position": { "type": "string", "maxLength": 100 },
+        "interviewDate": { "type": "string", "maxLength": 50 },
+        "startTime": { "type": "string", "maxLength": 50 },
+        "endTime": { "type": "string", "maxLength": 50 },
+        "durationSeconds": { "type": "number" },
+        "timeRemainingSeconds": { "type": "number" },
+        "currentQuestionIndex": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "completed"] },
+        "totalScore": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "percentage": { "type": "number" },
+        "recommendation": { "type": "string", "maxLength": 100 },
+        "recommendedPosition": { "type": "string", "maxLength": 100 },
+        "strengths": { "type": "string", "maxLength": 3000 },
+        "weaknesses": { "type": "string", "maxLength": 3000 },
+        "redFlags": { "type": "string", "maxLength": 3000 },
+        "additionalComments": { "type": "string", "maxLength": 3000 },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["interviewId", "candidateId", "interviewerId", "status"]
+    },
+    "interviewAnswer": {
+      "title": "InterviewAnswer",
+      "description": "Answer and individual score for a specific question",
+      "type": "object",
+      "properties": {
+        "answerId": { "type": "string", "maxLength": 128 },
+        "interviewId": { "type": "string", "maxLength": 128 },
+        "candidateId": { "type": "string", "maxLength": 128 },
+        "interviewerId": { "type": "string", "maxLength": 128 },
+        "questionId": { "type": "number" },
+        "category": { "type": "string", "maxLength": 100 },
+        "question": { "type": "string", "maxLength": 1000 },
+        "candidateAnswer": { "type": "string", "maxLength": 5000 },
+        "interviewerNotes": { "type": "string", "maxLength": 3000 },
+        "score": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "timestamp": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["answerId", "interviewId", "candidateId", "questionId"]
+    }
+  },
+  "firestore": {
+    "/interviewers/{interviewerId}": {
+      "schema": { "$ref": "#/entities/interviewer" },
+      "description": "Profiles of authorized interviewers"
+    },
+    "/candidates/{candidateId}": {
+      "schema": { "$ref": "#/entities/candidate" },
+      "description": "Candidate personal and job application info"
+    },
+    "/interviews/{interviewId}": {
+      "schema": { "$ref": "#/entities/interview" },
+      "description": "Full interview evaluation sessions and summaries"
+    },
+    "/interview_answers/{answerId}": {
+      "schema": { "$ref": "#/entities/interviewAnswer" },
+      "description": "Individual question answers and scores"
+    }
+  }
+}

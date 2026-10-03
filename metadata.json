@@ -1,0 +1,6 @@
+{
+  "name": "All In One Academy – Candidate Interview Evaluation System",
+  "description": "Professional 10-minute candidate interview evaluation system for All In One Academy with real-time scoring, live role-play, speech-to-text, and Firebase database storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

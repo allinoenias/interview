@@ -1,0 +1,19 @@
+# Render.com Infrastructure Blueprint
+# All In One Academy – Candidate Interview Evaluation System
+
+services:
+  # Option 1: Full-Stack Web Service (Node.js + Express + Vite Frontend)
+  - type: web
+    name: all-in-one-academy-eval
+    runtime: node
+    region: singapore # Asia Southeast / Singapore fast low-latency region
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000

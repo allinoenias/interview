@@ -1,0 +1,59 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Interviewer Profile
+    match /interviewers/{interviewerId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (request.auth.uid == interviewerId || request.auth.token.email == 'aallinoneias@gmail.com');
+    }
+
+    // Candidates collection
+    match /candidates/{candidateId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(candidateId)
+        && request.resource.data.fullName is string && request.resource.data.fullName.size() <= 100
+        && request.resource.data.email is string && request.resource.data.email.size() <= 100;
+      allow update: if isSignedIn() && isValidId(candidateId);
+      allow delete: if isSignedIn() && isValidId(candidateId);
+    }
+
+    // Interviews collection
+    match /interviews/{interviewId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(interviewId)
+        && request.resource.data.candidateId is string
+        && request.resource.data.interviewerId is string;
+      allow update: if isSignedIn() && isValidId(interviewId);
+      allow delete: if isSignedIn() && isValidId(interviewId);
+    }
+
+    // Interview Answers collection
+    match /interview_answers/{answerId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(answerId)
+        && request.resource.data.interviewId is string;
+      allow update: if isSignedIn() && isValidId(answerId);
+      allow delete: if isSignedIn() && isValidId(answerId);
+    }
+
+    // Test collection for connection check
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
